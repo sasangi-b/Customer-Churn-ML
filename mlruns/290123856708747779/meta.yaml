@@ -1,0 +1,7 @@
+artifact_location: file:///c:\Users\lenovo\Documents\Projects\ML Churn Model\Customer-Churn-ML/mlruns/290123856708747779
+creation_time: 1775245651265
+experiment_id: '290123856708747779'
+last_update_time: 1775245651265
+lifecycle_stage: active
+name: Telco Churn - XGBoost
+workspace: default

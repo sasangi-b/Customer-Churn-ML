@@ -1,0 +1,22 @@
+artifact_path: file:///c:\Users\lenovo\Documents\Projects\ML Churn Model\Customer-Churn-ML/mlruns/290123856708747779/models/m-66a3b24210c54b62ad3cab20e12c308b/artifacts
+flavors:
+  python_function:
+    data: model.ubj
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.10.20
+  xgboost:
+    code: null
+    data: model.ubj
+    model_class: xgboost.sklearn.XGBClassifier
+    model_format: ubj
+    xgb_version: 3.2.0
+mlflow_version: 3.10.1
+model_id: m-66a3b24210c54b62ad3cab20e12c308b
+model_size_bytes: 503042
+model_uuid: m-66a3b24210c54b62ad3cab20e12c308b
+prompts: null
+run_id: b7ac84bf61d34e018b5095f93c74c063
+utc_time_created: '2026-04-03 19:47:32.569302'

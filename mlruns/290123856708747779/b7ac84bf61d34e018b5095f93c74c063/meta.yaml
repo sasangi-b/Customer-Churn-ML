@@ -1,0 +1,14 @@
+artifact_uri: file:///c:\Users\lenovo\Documents\Projects\ML Churn Model\Customer-Churn-ML/mlruns/290123856708747779/b7ac84bf61d34e018b5095f93c74c063/artifacts
+end_time: 1775245667039
+entry_point_name: ''
+experiment_id: '290123856708747779'
+lifecycle_stage: active
+run_id: b7ac84bf61d34e018b5095f93c74c063
+run_name: classy-conch-828
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1775245651591
+status: 3
+tags: []
+user_id: lenovo

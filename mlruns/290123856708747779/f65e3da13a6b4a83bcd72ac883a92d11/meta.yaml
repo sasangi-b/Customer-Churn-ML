@@ -1,0 +1,14 @@
+artifact_uri: file:///c:\Users\lenovo\Documents\Projects\ML Churn Model\Customer-Churn-ML/mlruns/290123856708747779/f65e3da13a6b4a83bcd72ac883a92d11/artifacts
+end_time: 1775299038191
+entry_point_name: ''
+experiment_id: '290123856708747779'
+lifecycle_stage: active
+run_id: f65e3da13a6b4a83bcd72ac883a92d11
+run_name: rare-doe-580
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1775299027627
+status: 3
+tags: []
+user_id: lenovo

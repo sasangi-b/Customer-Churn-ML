@@ -1,0 +1,10 @@
+artifact_location: file:///c:\Users\lenovo\Documents\Projects\ML Churn Model\Customer-Churn-ML/mlruns/290123856708747779/models/m-76ef5f2708134383b0b252374967823e/artifacts
+creation_timestamp: 1775299028367
+experiment_id: '290123856708747779'
+last_updated_timestamp: 1775299038112
+model_id: m-76ef5f2708134383b0b252374967823e
+model_type: null
+name: model
+source_run_id: f65e3da13a6b4a83bcd72ac883a92d11
+status: 2
+status_message: null
