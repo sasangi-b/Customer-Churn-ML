@@ -1,0 +1,12 @@
+mlruns/
+.git/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.*
+notebooks/
+*.ipynb
+.ipynb_checkpoints/
+tests/
+*.md

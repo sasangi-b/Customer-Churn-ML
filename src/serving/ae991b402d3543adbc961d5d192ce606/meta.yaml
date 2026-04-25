@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/lenovo/Documents/Projects/ML%20Churn%20Model/Customer-Churn-ML/mlruns/281278882958573715/ae991b402d3543adbc961d5d192ce606/artifacts
+end_time: 1776018185809
+entry_point_name: ''
+experiment_id: '281278882958573715'
+lifecycle_stage: active
+run_id: ae991b402d3543adbc961d5d192ce606
+run_name: bold-bat-219
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1776018169507
+status: 3
+tags: []
+user_id: lenovo

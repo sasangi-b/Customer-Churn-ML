@@ -37,8 +37,11 @@ def main(args):
     # === MLflow Setup - ESSENTIAL for experiment tracking ===
     # Configure MLflow to use local file-based tracking (not a tracking server)
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    mlruns_path = args.mlflow_uri or f"file://{project_root}/mlruns"  # Local file-based tracking
-    mlflow.set_tracking_uri(mlruns_path)
+    #mlruns_path = args.mlflow_uri or f"file://{project_root}/mlruns"  # Local file-based tracking
+    #mlflow.set_tracking_uri(r"C:\Users\lenovo\Documents\Projects\ML Churn Model\Customer-Churn-ML\mlruns")
+    import pathlib
+    mlruns_path = pathlib.Path(project_root) / "mlruns"
+    mlflow.set_tracking_uri(mlruns_path.as_uri())   # always correct on Windows & Linux
     mlflow.set_experiment(args.experiment)  # Creates experiment if doesn't exist
 
     # Start MLflow run - all subsequent logging will be tracked under this run
