@@ -1,19 +1,59 @@
-name: Build and Push to Docker Hub
+name: CI/CD — Build & Deploy Churn App
 
 on:
   push:
-    branches: [main]  # Only trigger on main branch pushes
+    branches: [main]
+
+env:
+  DOCKERHUB_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/churn-app
 
 jobs:
-  build-and-push:
+  # ════════════════════════════════════════════════════════════════
+  # JOB 1 — Run Tests
+  # ════════════════════════════════════════════════════════════════
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx # modern Docker builder that supports multi-platform builds
-        uses: docker/setup-buildx-action@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest tests/ -v --tb=short
+
+  # ════════════════════════════════════════════════════════════════
+  # JOB 2 — Build Docker image & push to Docker Hub
+  # ════════════════════════════════════════════════════════════════
+  build-and-push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: test                      # only runs if tests pass
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Promote best model to models/best_model/
+        run: python scripts/promote_model.py
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -21,10 +61,54 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./dockerfile  # change if your Dockerfile has a different name or path
           push: true
-          tags: sasangib/churn:latest
+          tags: |
+            ${{ env.DOCKERHUB_IMAGE }}:latest
+            ${{ env.DOCKERHUB_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha       # cache layers between runs (faster builds)
+          cache-to: type=gha,mode=max
+
+  # ════════════════════════════════════════════════════════════════
+  # JOB 3 — Deploy to AWS App Runner
+  # ════════════════════════════════════════════════════════════════
+  deploy:
+    name: Deploy to App Runner
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Trigger App Runner deployment
+        run: |
+          aws apprunner start-deployment \
+            --service-arn ${{ secrets.APPRUNNER_SERVICE_ARN }}
+          echo "✅ Deployment triggered"
+
+      - name: Wait for App Runner to be RUNNING
+        run: |
+          echo "Waiting for deployment..."
+          for i in {1..30}; do
+            STATUS=$(aws apprunner describe-service \
+              --service-arn ${{ secrets.APPRUNNER_SERVICE_ARN }} \
+              --query 'Service.Status' --output text)
+            echo "Status: $STATUS"
+            if [ "$STATUS" = "RUNNING" ]; then
+              echo "✅ Live!"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "❌ Timed out waiting for deployment"
+          exit 1
